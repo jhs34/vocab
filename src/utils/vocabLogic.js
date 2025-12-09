@@ -61,9 +61,8 @@ const MOCK_DATA = [
 
 export async function fetchLessonData(dayId) {
     try {
-        // 실제 파일 경로 예: /words/day1.json
-        // public 폴더 내의 words 폴더를 참조한다고 가정
-        const response = await fetch(`/words/day${dayId}.json`);
+        const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+        const response = await fetch(`${baseUrl}words/day${dayId}.json`);
         if (!response.ok) {
             console.warn(`Failed to fetch day${dayId}.json, using mock data.`);
             // 데모를 위해 404일 경우 모의 데이터 반환 (실제 배포시 제거 가능)
@@ -82,11 +81,13 @@ export async function fetchLessonData(dayId) {
 // 가용 Day 목록을 스캔하는 함수
 export async function getAvailableDays(maxDays = 50) {
     const available = [];
+    const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+
     // 병렬 요청으로 빠르게 확인
     const checks = Array.from({ length: maxDays }, (_, i) => i + 1).map(async (i) => {
         try {
             // 직접 JSON 파싱 시도 (가장 확실한 방법)
-            const res = await fetch(`/words/day${i}.json`);
+            const res = await fetch(`${baseUrl}words/day${i}.json`);
             if (!res.ok) return null;
 
             const json = await res.json();
