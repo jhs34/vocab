@@ -65,26 +65,7 @@ export default function Study() {
                     </Link>
 
                     <div style={{ display: 'flex', gap: '8px' }}>
-                        {viewMode === 'list' && (
-                            <button
-                                onClick={() => setHideMeaning(!hideMeaning)}
-                                style={{
-                                    background: 'rgba(30, 41, 59, 0.5)',
-                                    color: hideMeaning ? 'var(--accent)' : 'var(--text-secondary)',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    padding: '8px',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    transition: 'all 0.2s'
-                                }}
-                                title={hideMeaning ? "Show Meanings" : "Hide Meanings"}
-                            >
-                                {hideMeaning ? <EyeOff size={20} /> : <Eye size={20} />}
-                            </button>
-                        )}
+
 
                         <div style={{ background: 'rgba(30, 41, 59, 0.5)', padding: '4px', borderRadius: '8px', display: 'flex', gap: '4px' }}>
                             <button
@@ -138,8 +119,8 @@ export default function Study() {
             {viewMode === 'list' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {words.map((item, idx) => (
-                        <div key={item.id} className="glass-panel" style={{ padding: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div key={item.id} className="glass-panel" style={{ padding: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1.5rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
                                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', opacity: 0.7, minWidth: '24px' }}>{idx + 1}</span>
                                 <span style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{item.word}</span>
                             </div>
@@ -147,9 +128,13 @@ export default function Study() {
                                 color: 'var(--text-secondary)',
                                 opacity: hideMeaning ? 0 : 1,
                                 transition: 'opacity 0.3s',
-                                cursor: hideMeaning ? 'pointer' : 'default'
+                                cursor: hideMeaning ? 'pointer' : 'default',
+                                textAlign: 'right',
+                                flex: 1,
+                                wordBreak: 'keep-all',
+                                lineHeight: '1.4'
                             }}
-                                onClick={() => hideMeaning && alert(item.raw_meaning)} // Optional: click to peek? Removed for now to keep simple as requested "transparent"
+                                onClick={() => hideMeaning && alert(item.raw_meaning)}
                             >
                                 {item.raw_meaning}
                             </span>
@@ -218,6 +203,35 @@ export default function Study() {
                         </button>
                     </div>
                 </>
+            )}
+
+            {viewMode === 'list' && (
+                <button
+                    onClick={() => setHideMeaning(!hideMeaning)}
+                    style={{
+                        position: 'fixed',
+                        bottom: '2rem',
+                        left: '2rem',
+                        zIndex: 100,
+                        width: '3.5rem',
+                        height: '3.5rem',
+                        borderRadius: '50%',
+                        background: 'var(--accent)',
+                        color: 'white',
+                        border: 'none',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s',
+                    }}
+                    onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+                    onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                >
+                    {hideMeaning ? <EyeOff size={24} /> : <Eye size={24} />}
+                </button>
             )}
         </div>
     );
