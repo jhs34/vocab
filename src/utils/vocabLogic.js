@@ -6,8 +6,8 @@
 export function parseAnswerList(rawString) {
     if (!rawString) return [];
 
-    // 1. 괄호와 괄호 안의 내용 제거 (소괄호 (), 대괄호 [])
-    let cleaned = rawString.replace(/\(.*?\)|\[.*?\]/g, '');
+    // 1. 괄호와 괄호 안의 내용 제거 (소괄호 (), 대괄호 [], 꺾쇠 <>)
+    let cleaned = rawString.replace(/\(.*?\)|\[.*?\]|<.*?>/g, '');
 
     // 2. 특수문자 제거 (물결표 ~, 점 · 등)
     cleaned = cleaned.replace(/[~·]/g, '');
