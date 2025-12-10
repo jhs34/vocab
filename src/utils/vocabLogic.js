@@ -27,15 +27,27 @@ export function parseAnswerList(rawString) {
  * @param {string[]} allowedAnswers - 해당 단어의 허용 정답 목록 (processedData의 answer_list)
  * @returns {boolean} - 정답 여부
  */
+// 사용자의 입력이 정답인지 확인하는 함수
 export function checkAnswer(userInput, allowedAnswers) {
     if (!userInput || !allowedAnswers) return false;
 
-    // 1. 사용자 입력 전처리: 모든 공백 제거
-    const cleanInput = userInput.replace(/\s+/g, '');
+    // 입력값 정규화 함수
+    const normalize = (str) => {
+        let s = str;
+        // 1. 괄호와 그 안의 내용 제거
+        s = s.replace(/\(.*?\)|\[.*?\]|<.*?>/g, '');
+        // 2. 특수문자 제거 (~, ·)
+        s = s.replace(/[~·]/g, '');
+        // 3. 공백 제거
+        s = s.replace(/\s+/g, '');
+        return s;
+    };
 
-    // 2. 정답 목록 중 하나라도 일치하는지 확인
+    const cleanInput = normalize(userInput);
+
+    // 정답 목록 중 하나라도 일치하는지 확인
     return allowedAnswers.some(answer => {
-        const cleanAnswer = answer.replace(/\s+/g, '');
+        const cleanAnswer = answer.replace(/\s+/g, ''); // 정답은 이미 parseAnswerList를 거쳐서 특수문자는 없지만 공백은 있을 수 있음
         return cleanInput === cleanAnswer;
     });
 }
